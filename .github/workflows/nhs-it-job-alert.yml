@@ -1,0 +1,43 @@
+name: NHS IT job alert
+
+on:
+  schedule:
+    - cron: "30 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Send NHS IT Band 4/5 alert
+        env:
+          EMAIL_TO: kennethoseinimako@gmail.com
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_REPLY_TO: ${{ secrets.EMAIL_REPLY_TO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_USE_SSL: ${{ secrets.SMTP_USE_SSL }}
+          SMTP_USE_STARTTLS: ${{ secrets.SMTP_USE_STARTTLS }}
+          NHS_SEARCH_PAGES: "1"
+          NHS_DETAIL_LIMIT: "40"
+        run: python scripts/nhs_it_band_4_5_email_alert.py
+
+      - name: Upload generated alert files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nhs-it-band-4-5-alert
+          path: outputs/
+          if-no-files-found: ignore
