@@ -2,7 +2,7 @@
 
 This project runs a scheduled GitHub Actions job that searches NHS Jobs for Band 4 and Band 5 IT-related roles with positive visa sponsorship wording, then emails the result to `kennethoseinimako@gmail.com`.
 
-## What it checks
+## What it checks.
 
 - Band 4 and Band 5 NHS Jobs listings.
 - IT, digital, informatics, service desk, application support, systems, clinical systems, cyber, data, and infrastructure keywords.
